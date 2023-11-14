@@ -1,6 +1,5 @@
 package com.worker_microservice.ordermicroservice.service;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -45,5 +44,5 @@ public class ImageService {
         String file_path = image.get().getPath();
         return Files.readAllBytes(new File(file_path).toPath());
     }
-    
+
 }
