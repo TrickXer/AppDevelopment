@@ -33,7 +33,15 @@ export default function Reports(props) {
                             }
                         }}
                         renderInput={params => {
-                            return <TextField {...params} defaultValue={products.products[0]} variant='standard' size='small' id='products' label='Search Products' name='products' />
+                            return <TextField
+                                InputProps={{
+                                    startAdornment: (
+                                        <IconButton sx={{ mr: 1 }} size='small' disableRipple >
+                                            <SearchIcon />
+                                        </IconButton>
+                                    )
+                                }}
+                                {...params} defaultValue={products.products[0]} variant='standard' size='small' id='products' label='Search Products' name='products' />
                         }}
                     />
                 </Box>

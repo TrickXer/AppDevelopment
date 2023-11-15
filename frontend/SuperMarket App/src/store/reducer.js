@@ -2,9 +2,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
+const API_URL = 'http://localhost:8080/'
 
 export const fetchUsers = createAsyncThunk('user/fetchUsers', () => {
-    return axios.get('http://localhost:8080/api/v1/users/all', {
+    return axios.get(API_URL+'api/v1/users/all', {
         mode: 'no-cors',
         headers: {
             "Authorization": `Bearer ${Cookies.get("login-token")}`,
@@ -14,7 +15,7 @@ export const fetchUsers = createAsyncThunk('user/fetchUsers', () => {
 })
 
 export const fetchWorkers = createAsyncThunk('worker/fetchWorkers', () => {
-    return axios.get('http://localhost:8080/api/v1/workers/all', {
+    return axios.get(API_URL+'api/v1/workers/all', {
         mode: 'no-cors',
         headers: {
             "Authorization": `Bearer ${Cookies.get("login-token")}`,
@@ -24,7 +25,7 @@ export const fetchWorkers = createAsyncThunk('worker/fetchWorkers', () => {
 })
 
 export const fetchOrders = createAsyncThunk('order/fetchOrders', () => {
-    return axios.get('http://localhost:8080/api/v1/orders/all', {
+    return axios.get(API_URL+'api/v1/orders/all', {
         mode: 'no-cors',
         headers: {
             "Authorization": `Bearer ${Cookies.get("login-token")}`,
@@ -34,7 +35,7 @@ export const fetchOrders = createAsyncThunk('order/fetchOrders', () => {
 })
 
 export const fetchProducts = createAsyncThunk('products/fetchProducts', () => {
-    return axios.get('http://localhost:8080/api/v2/products/all', {
+    return axios.get(API_URL+'api/v2/products/all', {
         mode: 'no-cors',
         headers: {
             "Authorization": `Bearer ${Cookies.get('login-token')}`
@@ -44,7 +45,7 @@ export const fetchProducts = createAsyncThunk('products/fetchProducts', () => {
 })
 
 export const fetchProduct = createAsyncThunk('product/fetchProduct', (id) => {
-    return axios.get(`http://localhost:8080/api/v2/products/${id}`, {
+    return axios.get(API_URL+`api/v2/products/${id}`, {
         // mode: 'no-cors',
         headers: {
             "Authorization": `Bearer ${Cookies.get('login-token')}`

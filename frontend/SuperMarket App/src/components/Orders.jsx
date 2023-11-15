@@ -5,6 +5,7 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import NewOrder from './NewOrder';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchOrders } from '../store/reducer';
+import verifyTick from '../data/animations/Animation - 1699959884235.webm'
 
 
 export default function Orders(props) {
@@ -24,7 +25,7 @@ export default function Orders(props) {
         if (created) {
             setTimeout(() => {
                 setCreated(false)
-            }, 1.7 * 1000);
+            }, 1 * 1000);
         }
     }, [created])
 
@@ -75,8 +76,9 @@ export default function Orders(props) {
                     created ? (
                         <Backdrop sx={{ zIndex: 1 }} open={created}>
                             <Zoom in={created} style={{ transitionDuration: '300ms' }} >
-                                <Box sx={{ width: '33em', height: '22em', backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Typography>Order created</Typography>
+                                <Box component={Paper} elevation={3} sx={{ borderRadius: '15px', width: '33em', height: '22em', backgroundColor: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '1em' }}>
+                                    <video style={{ width: '150px', height: '150px' }} src={verifyTick} alt='Loading...' autoPlay />
+                                    <Typography sx={{ fontSize: '21px', letterSpacing: '.075rem', fontFamily: 'monospace' }}>Order Created Successfully</Typography>
                                 </Box>
                             </Zoom>
                         </Backdrop>
@@ -109,7 +111,9 @@ export default function Orders(props) {
                                         <TableCell align='left' padding='none' sx={{ color: orderDetails === id ? 'white' : 'black', padding: '16px 16px 16px 0px', borderBottom: 'none', display: 'flex', alignItems: 'center', gap: 1 }}>
                                             <Avatar sx={{ width: 32, height: 32 }} src={props.defaultAvatar} />{order.user.userName}
                                         </TableCell>
-                                        <TableCell align='left' padding='normal' sx={{ color: orderDetails === id ? 'white' : 'black', borderBottom: 'none' }}>{order.orderDate}</TableCell>
+                                        <TableCell align='left' padding='normal' sx={{ color: orderDetails === id ? 'white' : 'black', borderBottom: 'none' }}>
+                                            {new Date(parseInt(order.orderDate)).getDate() + '-' + (new Date(parseInt(order.orderDate)).getMonth() + 1) + '-' + new Date(parseInt(order.orderDate)).getFullYear()}
+                                        </TableCell>
                                         <TableCell align='left' padding='normal' sx={{ color: orderDetails === id ? 'white' : 'black', borderTopRightRadius: 15, borderBottomRightRadius: 15, borderBottom: 'none' }}>₹ { calculatePrice(order.items) }</TableCell>
                                     </TableRow>
                                 ))

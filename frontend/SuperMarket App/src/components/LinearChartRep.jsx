@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Paper } from '@mui/material'
 import { BarChart } from '@mui/x-charts'
-import noDataFound from '../data/images/no-data-found.jpg'
+import noDataFound from '../data/images/data-not-found.jpg'
 
 export default function LinearChartRep({ datas, sx, elevation }) {
     let sales = datas.sales
@@ -33,7 +33,7 @@ export default function LinearChartRep({ datas, sx, elevation }) {
                     />
                 ) : (
                     // <img style={{ objectFit: 'contain', objectPosition: 'center' }} src={noDataFound} alt='no-data-found.jpg' />
-                    <Box sx={{ height: '100%', width: '100%', backgroundImage: `url(${noDataFound})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }} />
+                    <Box sx={{ height: '100%', width: '100%', backgroundImage: `url(${noDataFound})`, backgroundPosition: 'center', backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }} />
                 )
             }
         </Paper>

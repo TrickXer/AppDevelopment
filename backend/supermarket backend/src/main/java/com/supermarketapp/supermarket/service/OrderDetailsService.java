@@ -161,8 +161,7 @@ public class OrderDetailsService {
         for (OrderDetails order : orders) {
             List<Item> items = order.getItems();
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date formatDate = dateFormat.parse(order.getOrderDate());
+            Date formatDate = new Date(Long.parseLong(order.getOrderDate()));
 
             SimpleDateFormat monthFormat = new SimpleDateFormat("MMM", Locale.ENGLISH);
             String month = monthFormat.format(formatDate);

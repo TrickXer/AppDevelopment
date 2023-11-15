@@ -48,8 +48,8 @@ export default function NewOrder({ setOpen, created, setCreated }) {
             alert(`No sufficient stocks for products: ${outOfStocks}`)
         }
         else {
-            const d = new Date()
-            const date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
+            // const d = new Date()
+            // const date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
 
             let cust = {}
             cust['userName'] = customer
@@ -57,7 +57,7 @@ export default function NewOrder({ setOpen, created, setCreated }) {
 
             const order = {}
 
-            order['orderDate'] = date
+            order['orderDate'] = new Date().getTime()
             order['items'] = cart
             order['user'] = cust
 

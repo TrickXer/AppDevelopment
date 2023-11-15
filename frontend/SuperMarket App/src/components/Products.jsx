@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import { Backdrop, Box, Button, Card, CardActions, CardContent, CardMedia, CircularProgress, Grid, IconButton, Skeleton, TextField, Tooltip, Typography, Zoom } from '@mui/material'
+import { Backdrop, Box, Button, Card, CardActions, CardContent, CardMedia, CircularProgress, Grid, IconButton, Paper, Skeleton, TextField, Tooltip, Typography, Zoom } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Item from './Item'
 import CloseIcon from '@mui/icons-material/Close';
@@ -8,6 +8,8 @@ import { fetchProducts } from '../store/reducer'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import defaultImage from '../data/images/istockphoto-1288129966-612x612.jpg';
 import { addProducts, updateProducts } from '../api/axiosRequests.mjs';
+import verifyTick from '../data/animations/Animation - 1699959884235.webm'
+
 
 export default function Products(props) {
 
@@ -32,12 +34,16 @@ export default function Products(props) {
 
     const confirmation = (bool) => {
         if (bool) {
-            setCreated(true)
             setOpen(false)
-
+            
             setTimeout(() => {
-                setCreated(false)
-            }, 1.7 * 1000);
+                setCreated(true)
+                
+                setTimeout(() => {
+                    setCreated(false)
+                }, 1 * 1000)
+            }, .2 * 1000)
+
         }
     }
 
@@ -78,21 +84,21 @@ export default function Products(props) {
         <Box sx={{ display: 'flex', justifyContent: 'center', pt: 8, pb: 8, backgroundColor: '#F9F9FC' }}>
             <Box display='grid' width='100%' justifyContent='center' gridTemplateColumns='repeat(auto-fill, 300px)' rowGap={3} columnGap={3} >
                 {
-                    products.loading &&
-                    [...Array(10)].map((e, i) => (
-                        <Card>
-                            <Skeleton variant='rectangular' height='200px' animation='wave' />
-                            <CardContent>
-                                <Skeleton variant='text' animation='wave' />
-                                <Skeleton sx={{ mt: '1em' }} variant='text' width='36%' animation='wave' />
-                            </CardContent>
-                        </Card>
-                    ))
-                }
-                {
-                    products.products.map((item, i) => (
-                        <Item setOpen={setOpen} setProd={setProd} key={i} item={item} showStock={current.role === "ROLE_ADMIN"} />
-                    ))
+                    products.loading ? (
+                        [...Array(10)].map((e, i) => (
+                            <Card>
+                                <Skeleton variant='rectangular' height='200px' animation='wave' />
+                                <CardContent>
+                                    <Skeleton variant='text' animation='wave' />
+                                    <Skeleton sx={{ mt: '1em' }} variant='text' width='36%' animation='wave' />
+                                </CardContent>
+                            </Card>
+                        ))
+                    ) : (    
+                        products.products.map((item, i) => (
+                            <Item setOpen={setOpen} setProd={setProd} key={i} item={item} showStock={current.role === "ROLE_ADMIN"} />
+                        ))
+                    )
                 }
                 {
                     current.role === "ROLE_ADMIN" &&
@@ -157,8 +163,9 @@ export default function Products(props) {
                             created &&
                             <Backdrop sx={{ zIndex: 1 }} open={created}>
                                 <Zoom in={created} style={{ transitionDuration: '300ms' }} >
-                                    <Box sx={{ width: '33em', height: '22em', backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <Typography>Product {prod === null ? 'Added' : 'Updated'}</Typography>
+                                    <Box component={Paper} elevation={3} sx={{ borderRadius: '15px', width: '33em', height: '22em', backgroundColor: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '1em' }}>
+                                        <video style={{ width: '150px', height: '150px' }} src={verifyTick} alt='Loading...' autoPlay />
+                                        <Typography sx={{ fontSize: '21px', letterSpacing: '.075rem', fontFamily: 'monospace' }}>Product {prod === null ? 'Added' : 'Updated'} Successfully</Typography>
                                     </Box>
                                 </Zoom>
                             </Backdrop>

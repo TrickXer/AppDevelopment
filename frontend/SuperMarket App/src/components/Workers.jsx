@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Accordion, AccordionDetails, AccordionSummary, Avatar, Backdrop, Box, Button, Divider, IconButton, TextField, Tooltip, Typography, createTheme } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Avatar, Backdrop, Box, Button, Divider, IconButton, Paper, TextField, Tooltip, Typography, Zoom, createTheme } from '@mui/material'
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -7,10 +7,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import CloseIcon from '@mui/icons-material/Close';
 import { fetchWorkers } from '../store/reducer';
 import { addWorker, deleteWorker } from '../api/axiosRequests.mjs';
+import SearchIcon from '@mui/icons-material/Search';
+import noDataFound from '../data/images/data-not-found.jpg'
+import verifyTick from '../data/animations/Animation - 1699959884235.webm'
+
 
 export default function Workers({ defaultAvatar, logout }) {
 
     // const [expanded, setExpanded] = useState(false)
+
+    const [workerFilter, setworkerFilter] = useState('')
+    const [created, setCreated] = useState(false)
 
     // const handleChange = (panel) => (event, isExpanded) => {
     //     setExpanded(isExpanded ? panel : false);
@@ -46,6 +53,7 @@ export default function Workers({ defaultAvatar, logout }) {
         setAddLoading(true)
 
         addWorker({
+            workerTime: new Date(new Date().toUTCString()).toLocaleString("en-us", { timeZone: 'Asia/Kolkata' }),
             workerName: name,
             workerEmail: email,
             workerContact: parseInt(contact),
@@ -58,6 +66,14 @@ export default function Workers({ defaultAvatar, logout }) {
             if (response.status === 200) {
                 setAddLoading(false)
                 setOpen(false)
+                
+                setTimeout(() => {
+                    setCreated(true)
+                    
+                    setTimeout(() => {
+                        setCreated(false)
+                    }, 1 * 1000)
+                }, .2 * 1000)
             }
         })
     }
@@ -68,6 +84,14 @@ export default function Workers({ defaultAvatar, logout }) {
                     <Typography variant='h4' fontFamily='monospace' sx={{ mt: 3, letterSpacing: '0.1rem', fontWeight: 600 }}>Workers</Typography>
                     <Button onClick={() => setOpen(true)} sx={{ mt: 5, ml: 4 }} variant='contained' startIcon={<PersonAddIcon />}>Add Worker</Button>
                 </Box>
+                
+                <TextField autoFocus type='text' onChange={(e) => setworkerFilter(e.target.value)} placeholder='Search...' sx={{ mt: 4, width: '24%' }} variant='standard' InputProps={{
+                    startAdornment: (
+                        <IconButton sx={{ mr: 1 }} size='small' disableRipple >
+                            <SearchIcon />
+                        </IconButton>
+                    )
+                }} />
 
                 <Backdrop
                     sx={{ zIndex: 1 }}
@@ -101,52 +125,70 @@ export default function Workers({ defaultAvatar, logout }) {
                         </Box>
                     </Box>
                 </Backdrop>
+                
+                {
+                    created &&
+                    <Backdrop sx={{ zIndex: 1 }} open={created}>
+                        <Zoom in={created} style={{ transitionDuration: '300ms' }} >
+                            <Box component={Paper} elevation={3} sx={{ borderRadius: '15px', width: '33em', height: '22em', backgroundColor: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '1em' }}>
+                                <video style={{ width: '150px', height: '150px' }} src={verifyTick} alt='Loading...' autoPlay />
+                                <Typography sx={{ fontSize: '21px', letterSpacing: '.075rem', fontFamily: 'monospace' }}>Worker Added Successfully</Typography>
+                            </Box>
+                        </Zoom>
+                    </Backdrop>
+                }
 
                 <Box sx={{ mt: 8, overflowY: 'scroll', maxHeight: '700px' }}>
                     {
-                        workers.workers.map((worker, id) => (
-                            <Accordion elevation={0} disableGutters sx={{ mb: 1 }} key={id} >
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                // aria-controls={`panel${id}bh-content`}
-                                // id={`panel${id}bh-header`}
-                                >
-
-                                    <Typography sx={{ display: 'flex', alignItems: 'center', gap: 2, width: '33%', flexShrink: 0 }}>
-                                        <Avatar src={defaultAvatar} />
-                                        {worker.workerName}
-                                    </Typography>
-                                    <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <Typography color={worker.isWorkerInDuty ? 'green' : 'red'}>{worker.isWorkerInDuty ? 'In Duty' : 'Off Duty'}</Typography>
-                                        <Typography sx={{ mr: 32, color: 'text.secondary' }} >{worker.isWorkerInDuty ? `Logged in at: ${worker.workerTime}` : `Logged out at: ${worker.workerTime}`}</Typography>
-                                    </Box>
-                                </AccordionSummary>
-                                <Divider />
-                                <AccordionDetails>
-                                    <Box sx={{ display: 'flex', gap: 10 }}>
-                                        <img style={{ width: 300, height: 320 }} src={defaultAvatar} alt='avatar' />
-                                        <Box>
-                                            <Typography sx={{ display: 'flex', gap: 3, mr: 2, ml: 2, mt: 1, mb: 1 }} fontWeight={600} letterSpacing='.1rem'>Name:
-                                                <Typography fontWeight={500} letterSpacing='.05rem'>{worker.workerName}</Typography>
-                                            </Typography>
-                                            <Typography sx={{ display: 'flex', gap: 3, mr: 2, ml: 2, mt: 1, mb: 1 }} fontWeight={600} letterSpacing='.1rem'>Email-ID:
-                                                <Typography fontWeight={500} letterSpacing='.05rem'>{worker.workerEmail}</Typography>
-                                            </Typography>
-                                            <Typography sx={{ display: 'flex', gap: 3, mr: 2, ml: 2, mt: 1, mb: 1 }} fontWeight={600} letterSpacing='.1rem'>Contact:
-                                                <Typography fontWeight={500} letterSpacing='.05rem'>{worker.workerContact}</Typography>
-                                            </Typography>
-                                            <Typography sx={{ display: 'flex', gap: 3, mr: 2, ml: 2, mt: 1, mb: 1 }} fontWeight={600} letterSpacing='.1rem'>Gender:
-                                                <Typography fontWeight={500} letterSpacing='.05rem'>{worker.workerGender === 'M' ? 'Male' : 'Female'}</Typography>
-                                            </Typography>
-                                            <Typography sx={{ display: 'flex', gap: 3, mr: 2, ml: 2, mt: 1, mb: 1 }} fontWeight={600} letterSpacing='.1rem'>Salary:
-                                                <Typography fontWeight={500} letterSpacing='.05rem'>{`₹ ${worker.workerSalary}`}</Typography>
-                                            </Typography>
+                        workers.workers.filter(e => e.workerName.toLowerCase().startsWith(workerFilter.toLowerCase())).length !== 0 ? (
+                            workers.workers.filter(e => e.workerName.toLowerCase().startsWith(workerFilter.toLowerCase())).map((worker, id) => (
+                                <Accordion elevation={0} disableGutters sx={{ mb: 1 }} key={id} >
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                    // aria-controls={`panel${id}bh-content`}
+                                    // id={`panel${id}bh-header`}
+                                    >
+    
+                                        <Typography sx={{ display: 'flex', alignItems: 'center', gap: 2, width: '33%', flexShrink: 0 }}>
+                                            <Avatar src={defaultAvatar} />
+                                            {worker.workerName}
+                                        </Typography>
+                                        <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                            <Typography color={worker.isWorkerInDuty ? 'green' : 'red'}>{worker.isWorkerInDuty ? 'In Duty' : 'Off Duty'}</Typography>
+                                            <Typography sx={{ mr: 32, color: 'text.secondary' }} >{worker.isWorkerInDuty ? `Logged in at: ${worker.workerTime}` : `Logged out at: ${worker.workerTime}`}</Typography>
                                         </Box>
-                                    </Box>
-                                    <Button onClick={() => handleDeleteWorker(worker)} variant='outlined' color='error' endIcon={<DeleteIcon />}>delete</Button>
-                                </AccordionDetails>
-                            </Accordion>
-                        ))
+                                    </AccordionSummary>
+                                    <Divider />
+                                    <AccordionDetails>
+                                        <Box sx={{ display: 'flex', gap: 10 }}>
+                                            <img style={{ width: 300, height: 320 }} src={defaultAvatar} alt='avatar' />
+                                            <Box>
+                                                <Typography sx={{ display: 'flex', gap: 3, mr: 2, ml: 2, mt: 1, mb: 1 }} fontWeight={600} letterSpacing='.1rem'>Name:
+                                                    <Typography fontWeight={500} letterSpacing='.05rem'>{worker.workerName}</Typography>
+                                                </Typography>
+                                                <Typography sx={{ display: 'flex', gap: 3, mr: 2, ml: 2, mt: 1, mb: 1 }} fontWeight={600} letterSpacing='.1rem'>Email-ID:
+                                                    <Typography fontWeight={500} letterSpacing='.05rem'>{worker.workerEmail}</Typography>
+                                                </Typography>
+                                                <Typography sx={{ display: 'flex', gap: 3, mr: 2, ml: 2, mt: 1, mb: 1 }} fontWeight={600} letterSpacing='.1rem'>Contact:
+                                                    <Typography fontWeight={500} letterSpacing='.05rem'>{worker.workerContact}</Typography>
+                                                </Typography>
+                                                <Typography sx={{ display: 'flex', gap: 3, mr: 2, ml: 2, mt: 1, mb: 1 }} fontWeight={600} letterSpacing='.1rem'>Gender:
+                                                    <Typography fontWeight={500} letterSpacing='.05rem'>{worker.workerGender === 'M' ? 'Male' : 'Female'}</Typography>
+                                                </Typography>
+                                                <Typography sx={{ display: 'flex', gap: 3, mr: 2, ml: 2, mt: 1, mb: 1 }} fontWeight={600} letterSpacing='.1rem'>Salary:
+                                                    <Typography fontWeight={500} letterSpacing='.05rem'>{`₹ ${worker.workerSalary}`}</Typography>
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                        <Button onClick={() => handleDeleteWorker(worker)} variant='outlined' color='error' endIcon={<DeleteIcon />}>delete</Button>
+                                    </AccordionDetails>
+                                </Accordion>
+                            ))
+                        ) : (
+                            <Box sx={{ height: '100%', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <img style={{ height: '650px', width: '100%', objectFit: 'contain', objectPosition: 'center' }} src={noDataFound} alt='No data found' />
+                            </Box>
+                        )
                     }
                 </Box>
             </Box>
