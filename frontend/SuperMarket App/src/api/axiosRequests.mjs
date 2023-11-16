@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-const url = "http://localhost:8080"
+const url = "http://trixr:8080"
 
 export const authneticate = async (data) => {
     try {

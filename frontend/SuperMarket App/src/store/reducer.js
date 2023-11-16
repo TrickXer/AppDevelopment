@@ -2,56 +2,56 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-const API_URL = 'http://localhost:8080/'
+const API_URL = 'http://trixr:8080/'
 
 export const fetchUsers = createAsyncThunk('user/fetchUsers', () => {
-    return axios.get(API_URL+'api/v1/users/all', {
+    return axios.get(API_URL + 'api/v1/users/all', {
         mode: 'no-cors',
         headers: {
             "Authorization": `Bearer ${Cookies.get("login-token")}`,
         }
     })
-    .then((response) => response.data)
+        .then((response) => response.data)
 })
 
 export const fetchWorkers = createAsyncThunk('worker/fetchWorkers', () => {
-    return axios.get(API_URL+'api/v1/workers/all', {
+    return axios.get(API_URL + 'api/v1/workers/all', {
         mode: 'no-cors',
         headers: {
             "Authorization": `Bearer ${Cookies.get("login-token")}`,
         }
     })
-    .then((response) => response.data)
+        .then((response) => response.data)
 })
 
 export const fetchOrders = createAsyncThunk('order/fetchOrders', () => {
-    return axios.get(API_URL+'api/v1/orders/all', {
+    return axios.get(API_URL + 'api/v1/orders/all', {
         mode: 'no-cors',
         headers: {
             "Authorization": `Bearer ${Cookies.get("login-token")}`,
         }
     })
-    .then((response) => response.data)
+        .then((response) => response.data)
 })
 
 export const fetchProducts = createAsyncThunk('products/fetchProducts', () => {
-    return axios.get(API_URL+'api/v2/products/all', {
+    return axios.get(API_URL + 'api/v2/products/all', {
         mode: 'no-cors',
         headers: {
             "Authorization": `Bearer ${Cookies.get('login-token')}`
         }
     })
-    .then((response) => response.data)
+        .then((response) => response.data)
 })
 
 export const fetchProduct = createAsyncThunk('product/fetchProduct', (id) => {
-    return axios.get(API_URL+`api/v2/products/${id}`, {
+    return axios.get(API_URL + `api/v2/products/${id}`, {
         // mode: 'no-cors',
         headers: {
             "Authorization": `Bearer ${Cookies.get('login-token')}`
         }
     })
-    .then((response) => response.data)
+        .then((response) => response.data)
 })
 
 // redux actions

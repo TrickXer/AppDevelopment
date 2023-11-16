@@ -45,4 +45,15 @@ public class ImageService {
         return Files.readAllBytes(new File(file_path).toPath());
     }
 
+    public Boolean deleteImage(String name) {
+        Optional<Image> isExist = imageRepository.findById(name);
+
+        if (isExist.isPresent()) {
+            imageRepository.deleteById(isExist.get().getId());
+            return true;
+        }
+
+        return false;
+    }
+
 }

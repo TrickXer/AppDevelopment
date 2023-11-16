@@ -48,12 +48,26 @@ public class ProductService {
         if (!existProduct.isPresent())
             return false;
 
-        if (product.getProductName() != null) existProduct.get().setProductName(product.getProductName());
-        if (product.getProductPrice() != null) existProduct.get().setProductPrice(product.getProductPrice());
-        if (product.getFixedProductStock() != 0) existProduct.get().setFixedProductStock(product.getFixedProductStock());
-        
+        if (product.getProductName() != null)
+            existProduct.get().setProductName(product.getProductName());
+        if (product.getProductPrice() != null)
+            existProduct.get().setProductPrice(product.getProductPrice());
+        if (product.getFixedProductStock() != 0)
+            existProduct.get().setFixedProductStock(product.getFixedProductStock());
+
         existProduct.get().setProductStock(product.getProductStock());
 
         return productRepository.save(existProduct.get()) != null ? true : false;
+    }
+    
+    public Boolean delete(String productId) {
+        Optional<Product> isExist = productRepository.findById(productId);
+
+        if (isExist.isPresent() && imageService.deleteImage(isExist.get().getProductName())) {
+            productRepository.deleteById(productId);
+            return true;
+        }
+
+        return false;
     }
 }
