@@ -133,6 +133,7 @@ export default function NewOrder({ setOpen, created, setCreated }) {
                             if (value !== null) {
                                 const item = {
                                     productId: value['productId'],
+                                    productName: value['productName'],
                                     productQuantity: 1
                                 }
                                 setCart([...cart, item])
