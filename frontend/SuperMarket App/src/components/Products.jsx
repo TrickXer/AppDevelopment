@@ -30,7 +30,7 @@ export default function Products(props) {
 
     useEffect(() => {
         dispatch(fetchProducts())
-    }, [dispatch, open])
+    }, [dispatch, created])
 
     const confirmation = (bool) => {
         if (bool) {
